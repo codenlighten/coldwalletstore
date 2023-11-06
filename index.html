@@ -187,7 +187,7 @@
 		</div>
 		<div class="container" id="copyright2023">
 			<a
-				href="https://plugins.whatsonchain.com/api/plugin/main/35d5f7f4756241ab46ac8a2ee78b31e90487529e5c6261dc303d415b4e9c2ee8"
+				href="https://plugins.whatsonchain.com/api/plugin/main/db21a9dedc10b010ced29cd3862024cccad2fdebd6ff28dca64e3fb4b2d175d1"
 				>Latest Fully Onchain Version</a
 			>
 			<p id="hash"></p>
@@ -439,6 +439,13 @@
 						.to(address, parseInt(amount))
 						.change(currentSelectedAddress.address)
 						.sign(privateKey);
+					if (
+						!confirm(
+							`Are you sure you want to send ${amount} BSV to ${address}?`
+						)
+					) {
+						return;
+					}
 					const txid = await broadcast(tx.toString());
 					console.log(txid);
 					document.getElementById(
