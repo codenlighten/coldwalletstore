@@ -209,7 +209,7 @@
 				const decryptedMnemonic = decryptData(localStorage.mnemonic, password);
 				if (!decryptedMnemonic) {
 					alert("Incorrect password!");
-					location.reload();
+					return; //stop execution
 				}
 				mnemonic = Mnemonic.fromString(decryptedMnemonic);
 				document.getElementById("currentMnemonicList").innerHTML =
