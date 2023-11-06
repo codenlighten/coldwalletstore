@@ -234,10 +234,10 @@
 				addresses = generateAddresses(hdPrivateKey, derivationPaths);
 				document.getElementById(
 					"currentAddress"
-				).innerHTML = `Current Address: ${addresses[0].address}`;
+				).innerHTML = `Root Address: ${addresses[0].address}`;
 				document.getElementById(
 					"currentPath"
-				).innerHTML = `Current Path: ${addresses[0].path}`;
+				).innerHTML = `Root Path: ${addresses[0].path}`;
 			}
 			const getBalance = async (address) => {
 				const response = await fetch(
