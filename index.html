@@ -238,6 +238,8 @@
 				.addEventListener("click", () => {
 					const mnemonicImport =
 						document.getElementById("mnemonicImport").value;
+					//trim whitespace
+					mnemonicImport = mnemonicImport.trim();
 					mnemonic = Mnemonic.fromString(mnemonicImport);
 					localStorage.mnemonic = mnemonic.toString();
 					document.getElementById("currentMnemonicList").innerHTML =
