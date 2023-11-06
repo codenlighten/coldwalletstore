@@ -28,6 +28,8 @@
 		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-message.min.js"></script>
 		<!-- qrious cdn -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+		<!-- encryption -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 		<style>
 			* {
 				box-sizing: border-box;
@@ -131,6 +133,9 @@
 			<h2>Current Mnemonic</h2>
 			<p>This is your current mnemonic.</p>
 			<h3 id="currentMnemonicList"></h3>
+			<label for="">Encrypt Mnemonic</label>
+			<input type="password" id="encryptMnemonic" />
+			<button id="encryptMnemonicBtn">Encrypt</button>
 		</div>
 		<div class="container" id="derivationPathSelection">
 			<h2>Derivation Path</h2>
@@ -155,8 +160,37 @@
 		<script>
 			const Buffer = bsv.deps.Buffer;
 			const Mnemonic = bsv.Mnemonic;
+			let password;
+			let encryptStatus = false;
 			//english
-
+			const getBalance = async (address) => {
+				const response = await fetch(
+					`https://api.whatsonchain.com/v1/bsv/main/address/${address}/balance`
+				);
+				const data = await response.json();
+				const balance = data.confirmed + data.unconfirmed;
+				return balance;
+			};
+			const nonstandardOutputs = async (address) => {
+				const response = await fetch(
+					`https://api.whatsonchain.com/v1/bsv/main/address/${address}/unspent`
+				);
+				const data = await response.json();
+				const nonstandardOutputs = data.filter((output) => {
+					return output.scriptPubKey.type === "nonstandard";
+				});
+				return nonstandardOutputs;
+			};
+			const encryptData = (data, password) => {
+				const encrypted = CryptoJS.AES.encrypt(data, password).toString();
+				return encrypted;
+			};
+			const decryptData = (data, password) => {
+				const decrypted = CryptoJS.AES.decrypt(data, password).toString(
+					CryptoJS.enc.Utf8
+				);
+				return decrypted;
+			};
 			let mnemonic = new Mnemonic(Mnemonic.Words.ENGLISH);
 
 			if (!localStorage.mnemonic) {
@@ -167,6 +201,13 @@
 				mnemonic = Mnemonic.fromString(localStorage.mnemonic);
 				document.getElementById("currentMnemonicList").innerHTML =
 					mnemonic.toString();
+				encryptStatus = localStorage.encryptStatus;
+				if (encryptStatus) {
+					password = document.getElementById("encryptMnemonic").value;
+					const decryptedMnemonic = decryptData(mnemonic.toString(), password);
+					document.getElementById("currentMnemonicList").innerHTML =
+						decryptedMnemonic;
+				}
 			}
 
 			const hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
@@ -214,11 +255,22 @@
                     <strong>WIF:</strong> ${addressObj.wif}<br>
                 </div>
             `;
-
+					const p = document.createElement("p");
 					const qrCodeCanvas = createQRCodeElement(addressObj.address);
 					qrCodeCanvas.className = "qrcode";
 					div.appendChild(qrCodeCanvas);
-
+          // add eventlistener for address balance
+          qrCodeCanvas.addEventListener("click", async () => {
+            const balance = await getBalance(addressObj.address);
+            const nonstandard = await nonstandardOutputs(addressObj.address);
+            if (balance > 0) {
+              alert(`Balance: ${balance} satoshis`);
+            } else if (nonstandard.length > 0) {
+              alert(`Nonstandard Outputs: ${nonstandard.length}`);
+            } else {
+              alert("No balance or nonstandard outputs");
+            }
+          });
 					currentAddressesList.appendChild(div);
 				});
 			}
@@ -302,6 +354,28 @@
 				localStorage.removeItem("mnemonic");
 				location.reload();
 			});
+
+			// Event listener for the "Encrypt Mnemonic" button
+			password = document.getElementById("encryptMnemonic").value;
+			document
+				.getElementById("encryptMnemonicBtn")
+				.addEventListener("click", () => {
+					if (localStorage.encryptStatus) {
+						alert("Mnemonic already encrypted!");
+						return;
+					}
+					password = document.getElementById("encryptMnemonic").value;
+					if (password.length < 8) {
+						alert("Password must be at least 8 characters!");
+						return;
+					}
+					const encryptedMnemonic = encryptData(mnemonic.toString(), password);
+					localStorage.mnemonic = encryptedMnemonic;
+					document.getElementById("currentMnemonicList").innerHTML =
+						encryptedMnemonic;
+					encryptStatus = true;
+					localStorage.encryptStatus = encryptStatus;
+				});
 		</script>
 	</body>
 </html>
