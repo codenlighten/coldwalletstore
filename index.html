@@ -121,7 +121,10 @@
 		<script>
 			const Buffer = bsv.deps.Buffer;
 			const Mnemonic = bsv.Mnemonic;
-			let mnemonic = new Mnemonic();
+			//english
+
+			let mnemonic = new Mnemonic(Mnemonic.Words.ENGLISH);
+
 			if (!localStorage.mnemonic) {
 				localStorage.mnemonic = mnemonic.toString();
 				document.getElementById("currentMnemonicList").innerHTML =
@@ -235,8 +238,8 @@
 				.addEventListener("click", () => {
 					const mnemonicImport =
 						document.getElementById("mnemonicImport").value;
-					mnemonic = Mnemonic.fromString(mnemonicImport);
 					localStorage.mnemonic = mnemonicImport;
+					mnemonic = Mnemonic.fromString(localStorage.mnemonic);
 					document.getElementById("currentMnemonicList").innerHTML =
 						mnemonic.toString();
 				});
