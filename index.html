@@ -78,6 +78,13 @@
 				margin: 10px 0;
 				width: 95%;
 			}
+			textarea {
+				border: 1px solid #ddd;
+				border-radius: 5px;
+				padding: 10px;
+				margin: 10px 0;
+				width: 95%;
+			}
 			label {
 				display: block;
 				margin: 20px 0 5px;
@@ -109,8 +116,10 @@
 			<h2>Import Mnemonic</h2>
 			<p>Enter your mnemonic to import your wallet.</p>
 			<textarea name="" id="mnemonicImport" cols="30" rows="10"></textarea>
-			<button id="importMnemonicBtn">Import</button>
-			<button id="resetMnemonic">Reset Mnemonic</button>
+			<div class="buttons">
+				<button id="importMnemonicBtn">Import</button>
+				<button id="resetMnemonic">Reset Mnemonic</button>
+			</div>
 		</div>
 		<div class="container" id="currentMnemonic">
 			<h2>Current Mnemonic</h2>
