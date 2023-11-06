@@ -113,6 +113,11 @@
 			<div id="currentAddressesList"></div>
 		</div>
 		<div class="container" id="qrcodes"></div>
+		<div class="container" id="exportMnemonic">
+			<h2>Export Mnemonic</h2>
+			<p>Export your mnemonic.</p>
+			<button id="exportMnemonicBtn">Export</button>
+		</div>
 		<script>
 			const Buffer = bsv.deps.Buffer;
 			const Mnemonic = bsv.Mnemonic;
@@ -219,6 +224,29 @@
 
 			// Initialize the select with derivation paths
 			populateDerivationPathSelect(derivationPaths);
+
+			// Event listener for the "Import Mnemonic" button
+			document
+				.getElementById("importMnemonicBtn")
+				.addEventListener("click", () => {
+					const mnemonicImport =
+						document.getElementById("mnemonicImport").value;
+					mnemonic = Mnemonic.fromString(mnemonicImport);
+					localStorage.mnemonic = mnemonicImport;
+					document.getElementById("currentMnemonicList").innerHTML =
+						mnemonic.toString();
+				});
+
+			// Event listener for the "Export Mnemonic" button
+			document
+				.getElementById("exportMnemonicBtn")
+				.addEventListener("click", () => {
+					const mnemonicExport = document.getElementById(
+						"currentMnemonicList"
+					).innerHTML;
+					navigator.clipboard.writeText(mnemonicExport);
+					alert("Mnemonic copied to clipboard!");
+				});
 		</script>
 	</body>
 </html>
