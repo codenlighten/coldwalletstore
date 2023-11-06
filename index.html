@@ -108,6 +108,11 @@
 				width: 100px;
 				height: 100px;
 			}
+			.key {
+				font-family: monospace;
+				border: #005f73 1px solid;
+				padding: 10px;
+			}
 			@media (max-width: 600px) {
 				.container {
 					margin: 10px auto;
@@ -144,9 +149,10 @@
 			</div>
 		</div>
 		<div class="container" id="currentMnemonic">
-			<h2>Current Mnemonic</h2>
-			<p>This is your current mnemonic.</p>
-			<h3 id="currentMnemonicList"></h3>
+			<h3>Current Mnemonic</h3>
+			<p class="key" id="currentMnemonicList"></p>
+			<p class="key" id="currentAddress"></p>
+			<p class="key" id="currentPath"></p>
 		</div>
 		<div class="container" id="derivationPathSelection">
 			<h2>Derivation Path</h2>
@@ -175,24 +181,63 @@
 			<p>Export your mnemonic.</p>
 			<button id="exportMnemonicBtn">Export</button>
 		</div>
-		<div id="copyright2023">
+		<div class="container" id="copyright2023">
+			<a
+				href="https://plugins.whatsonchain.com/api/plugin/main/ae77a6cc94572b4cda69c8e3edb5ff3b99fa14c16228e08e21ae6291b7ff704f"
+				>https://plugins.whatsonchain.com/api/plugin/main/ae77a6cc94572b4cda69c8e3edb5ff3b99fa14c16228e08e21ae6291b7ff704f</a
+			>
+			<p id="hash"></p>
 			<p>&copy; 2023 ColdWallet.Site</p>
 		</div>
 		<script>
 			const Buffer = bsv.deps.Buffer;
 			const Mnemonic = bsv.Mnemonic;
+			const hash = bsv.crypto.Hash;
+			const hashdata = (data) => {
+				return hash.sha256(Buffer.from(data)).toString("hex");
+			};
 			//english
 
 			let mnemonic = new Mnemonic(Mnemonic.Words.ENGLISH);
-
+			let hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
+			let hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
+			let addresses = [];
+			let qrcodes = [];
+			const derivationPaths = [
+				"m/44'/0'/0'/0/0",
+				"m/44'/0'/0'/0/1",
+				"m/44'/0'/0'/0/2",
+				"m/44'/0'/0'/0/3",
+				"m/44'/0'/0'/0/4",
+				"m/44'/0'/0'/0/5",
+				"m/44'/0'/0'/0/6",
+				"m/44'/0'/0'/0/7",
+				"m/44'/0'/0'/0/8",
+				"m/44'/0'/0'/0/9",
+			];
+			let currentSelectedAddress;
 			if (!localStorage.mnemonic) {
 				localStorage.mnemonic = mnemonic.toString();
 				document.getElementById("currentMnemonicList").innerHTML =
 					mnemonic.toString();
+				addresses = generateAddresses(hdPrivateKey, derivationPaths);
+				document.getElementById(
+					"currentAddress"
+				).innerHTML = `Current Address: ${addresses[0].address}`;
+				document.getElementById(
+					"currentPath"
+				).innerHTML = `Current Path: ${addresses[0].path}`;
 			} else {
 				mnemonic = Mnemonic.fromString(localStorage.mnemonic);
 				document.getElementById("currentMnemonicList").innerHTML =
 					mnemonic.toString();
+				addresses = generateAddresses(hdPrivateKey, derivationPaths);
+				document.getElementById(
+					"currentAddress"
+				).innerHTML = `Current Address: ${addresses[0].address}`;
+				document.getElementById(
+					"currentPath"
+				).innerHTML = `Current Path: ${addresses[0].path}`;
 			}
 			const getBalance = async (address) => {
 				const response = await fetch(
@@ -219,23 +264,7 @@
 				});
 				return utxos;
 			};
-			let hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
-			let hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
-			const addresses = [];
-			const qrcodes = [];
-			const derivationPaths = [
-				"m/44'/0'/0'/0/0",
-				"m/44'/0'/0'/0/1",
-				"m/44'/0'/0'/0/2",
-				"m/44'/0'/0'/0/3",
-				"m/44'/0'/0'/0/4",
-				"m/44'/0'/0'/0/5",
-				"m/44'/0'/0'/0/6",
-				"m/44'/0'/0'/0/7",
-				"m/44'/0'/0'/0/8",
-				"m/44'/0'/0'/0/9",
-			];
-			let currentSelectedAddress;
+
 			// Utility function to create a QR Code element
 			function createQRCodeElement(address) {
 				const qr = new QRious({
@@ -298,6 +327,7 @@
 					const address = childKey.publicKey.toAddress().toString();
 					//private key
 					const wif = childPrivateKey.privateKey.toWIF();
+
 					return { path, address, wif };
 				});
 
@@ -411,6 +441,13 @@
 						"resultTxid"
 					).innerHTML = `<a href="https://whatsonchain.com/tx/${txid}" target="_blank">Transaction ID: ${txid}</a>`;
 				});
+			//ondocumentload
+			document.addEventListener("DOMContentLoaded", async () => {
+				//hash of html for security
+				document.getElementById("hash").innerHTML = `Hash: ${hashdata(
+					document.documentElement.innerHTML
+				)}`;
+			});
 		</script>
 	</body>
 </html>
