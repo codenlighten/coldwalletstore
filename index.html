@@ -21,63 +21,70 @@
 		/>
 		<style>
 			* {
-				font-family: "Montserrat", sans-serif;
-			}
-			body {
+				box-sizing: border-box;
 				margin: 0;
 				padding: 0;
 			}
-			.container {
-				margin: 0 auto;
-				max-width: 600px;
+			body {
+				font-family: "Montserrat", sans-serif;
+				background-color: #f4f7f6;
+				color: #333;
+				line-height: 1.6;
 				padding: 20px;
+			}
+			.container {
+				background-color: #fff;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+				border-radius: 8px;
+				padding: 20px;
+				margin: 20px auto;
+				max-width: 800px;
+				word-wrap: break-word;
+			}
+			h1,
+			h2 {
+				color: #333;
+			}
+			button {
+				background-color: #008cba;
+				border: none;
+				border-radius: 5px;
+				color: white;
+				padding: 10px 20px;
+				text-decoration: none;
+				margin: 4px 2px;
+				cursor: pointer;
+				font-size: 16px;
+				transition: background-color 0.3s ease;
+			}
+			button:hover {
+				background-color: #005f73;
+			}
+			input[type="text"],
+			input[type="password"] {
+				border: 1px solid #ddd;
+				border-radius: 5px;
+				padding: 10px;
+				margin: 10px 0;
+				width: 95%;
+			}
+			label {
+				display: block;
+				margin: 20px 0 5px;
 			}
 			#header {
 				text-align: center;
+				border-bottom: 5px solid #008cba;
+				padding-bottom: 20px;
+				margin-bottom: 20px;
 			}
-			#importMnemonic {
-				text-align: center;
+			#header h1 {
+				margin-bottom: 10px;
 			}
-			#currentAddresses {
-				text-align: center;
-			}
-			#currentAddressesList {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-			}
-			#currentAddressesList > div {
-				margin: 10px 0;
-			}
-			#qrcodes {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-			}
-			#qrcodes > div {
-				margin: 10px 0;
-			}
-
 			@media (max-width: 600px) {
-				#currentAddressesList {
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
-					align-items: center;
-				}
-				#currentAddressesList > div {
-					margin: 10px 0;
-				}
-				#qrcodes {
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
-					align-items: center;
-				}
-				#qrcodes > div {
-					margin: 10px 0;
+				.container {
+					margin: 10px auto;
+					padding: 10px;
 				}
 			}
 		</style>
