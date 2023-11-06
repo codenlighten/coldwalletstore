@@ -244,7 +244,10 @@
 					const qrCodeCanvas = createQRCodeElement(addressObj.address);
 					qrCodeCanvas.className = "qrcode";
 					const p = document.createElement("p");
+					const directions = document.createElement("p");
+					directions.innerHTML = `Click QR Code to get balance`;
 					div.appendChild(qrCodeCanvas);
+					div.appendChild(directions);
 					//add event listener to qr code for balance
 					qrCodeCanvas.addEventListener("click", async () => {
 						const balance = await getBalance(addressObj.address);
@@ -255,6 +258,7 @@
 							balance: balance,
 							privateKey: addressObj.wif,
 						};
+
 						div.appendChild(p);
 					});
 					currentAddressesList.appendChild(div);
