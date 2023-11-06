@@ -232,11 +232,13 @@
 
 					const qrCodeCanvas = createQRCodeElement(addressObj.address);
 					qrCodeCanvas.className = "qrcode";
+					const p = document.createElement("p");
 					div.appendChild(qrCodeCanvas);
 					//add event listener to qr code for balance
 					qrCodeCanvas.addEventListener("click", async () => {
 						const balance = await getBalance(addressObj.address);
-						alert(`Address: ${addressObj.address}\nBalance: ${balance} sats`);
+						p.innerHTML = `Balance: ${balance}`;
+						div.appendChild(p);
 					});
 					currentAddressesList.appendChild(div);
 				});
