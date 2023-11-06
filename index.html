@@ -110,6 +110,7 @@
 			<p>Enter your mnemonic to import your wallet.</p>
 			<textarea name="" id="mnemonicImport" cols="30" rows="10"></textarea>
 			<button id="importMnemonicBtn">Import</button>
+			<button id="resetMnemonic">Reset Mnemonic</button>
 		</div>
 		<div class="container" id="currentMnemonic">
 			<h2>Current Mnemonic</h2>
@@ -132,6 +133,9 @@
 			<h2>Export Mnemonic</h2>
 			<p>Export your mnemonic.</p>
 			<button id="exportMnemonicBtn">Export</button>
+		</div>
+		<div class="container" id="copyright2023">
+			<p>&copy; 2023 ColdWallet.Site</p>
 		</div>
 		<script>
 			const Buffer = bsv.deps.Buffer;
@@ -274,6 +278,12 @@
 					navigator.clipboard.writeText(mnemonicExport);
 					alert("Mnemonic copied to clipboard!");
 				});
+
+			// Event listener for the "Reset Mnemonic" button
+			document.getElementById("resetMnemonic").addEventListener("click", () => {
+				localStorage.removeItem("mnemonic");
+				location.reload();
+			});
 		</script>
 	</body>
 </html>
