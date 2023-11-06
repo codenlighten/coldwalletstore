@@ -14,11 +14,6 @@
 		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-message.min.js"></script>
 		<!-- qrious cdn -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-		<!-- montserrat -->
-		<link
-			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
-			rel="stylesheet"
-		/>
 		<style>
 			* {
 				box-sizing: border-box;
@@ -26,7 +21,7 @@
 				padding: 0;
 			}
 			body {
-				font-family: "Montserrat", sans-serif;
+				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 				background-color: #f4f7f6;
 				color: #333;
 				line-height: 1.6;
@@ -101,8 +96,19 @@
 			<textarea name="" id="mnemonicImport" cols="30" rows="10"></textarea>
 			<button id="importMnemonicBtn">Import</button>
 		</div>
+		<div class="container" id="currentMnemonic">
+			<h2>Current Mnemonic</h2>
+			<p>This is your current mnemonic.</p>
+			<div id="currentMnemonicList"></div>
+		</div>
+		<div class="container" id="derivationPathSelection">
+			<h2>Derivation Path</h2>
+			<p>Select the derivation path for your addresses:</p>
+			<select id="derivationPath"></select>
+			<button id="generateAddressesBtn">Generate Addresses</button>
+		</div>
 		<div class="container" id="currentAddresses">
-			<h2>Current Addresses</h2>
+			<h2>Current Paths & Addresses</h2>
 			<p>These are your current addresses.</p>
 			<div id="currentAddressesList"></div>
 		</div>
@@ -110,98 +116,109 @@
 		<script>
 			const Buffer = bsv.deps.Buffer;
 			const Mnemonic = bsv.Mnemonic;
-			const mnemonic = new Mnemonic(Mnemonic.Words.ENGLISH);
+			let mnemonic = new Mnemonic();
+			if (localStorage.mnemonic) {
+				mnemonic = Mnemonic.fromString(localStorage.mnemonic);
+				document.getElementById("currentMnemonicList").innerHTML =
+					mnemonic.toString();
+			}
+
 			const hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
 			const hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
 			const addresses = [];
 			const qrcodes = [];
-			const generateAddress = (index) => {
-				const address = hdPublicKey
-					.deriveChild(index)
-					.publicKey.toAddress()
-					.toString();
-				addresses.push(address);
+			const derivationPaths = [
+				"m/44'/0'/0'/0/0",
+				"m/44'/0'/0'/0/1",
+				"m/44'/0'/0'/0/2",
+				"m/44'/0'/0'/0/3",
+				"m/44'/0'/0'/0/4",
+				"m/44'/0'/0'/0/5",
+				"m/44'/0'/0'/0/6",
+				"m/44'/0'/0'/0/7",
+				"m/44'/0'/0'/0/8",
+				"m/44'/0'/0'/0/9",
+			];
+
+			// Utility function to create a QR Code element
+			function createQRCodeElement(address) {
 				const qr = new QRious({
-					element: document.getElementById(`qrcode-${index}`),
 					value: address,
+					size: 150,
 				});
-				qrcodes.push(qr);
-			};
-			const generateAddresses = () => {
-				for (let i = 0; i < 10; i++) {
-					generateAddress(i);
-				}
-			};
-			const renderAddresses = () => {
+				const canvas = document.createElement("canvas");
+				canvas.getContext("2d").drawImage(qr.canvas, 0, 0);
+				return canvas;
+			}
+
+			// Render the QR codes and addresses to the UI
+			function renderAddressesAndQRCodes(addresses) {
 				const currentAddressesList = document.getElementById(
 					"currentAddressesList"
 				);
-				currentAddressesList.innerHTML = "";
-				addresses.forEach((address, index) => {
+				currentAddressesList.innerHTML = ""; // Clear the list
+
+				addresses.forEach((addressObj) => {
 					const div = document.createElement("div");
+					div.className = "address-item";
 					div.innerHTML = `
-        <p>${index}: ${address}</p>
-        <canvas id="qrcode-${index}"></canvas>
-      `;
+                <div class="address-info">
+                    <strong>Path:</strong> ${addressObj.path}<br>
+                    <strong>Address:</strong> ${addressObj.address}
+                </div>
+            `;
+
+					const qrCodeCanvas = createQRCodeElement(addressObj.address);
+					qrCodeCanvas.className = "qrcode";
+					div.appendChild(qrCodeCanvas);
+
 					currentAddressesList.appendChild(div);
 				});
-			};
-			const renderQrcodes = () => {
-				qrcodes.forEach((qr, index) => {
-					qr.set({
-						value: addresses[index],
-					});
+			}
+
+			// Generate addresses for the selected derivation paths
+			function generateAddresses(hdPrivateKey, derivationPaths) {
+				const addresses = derivationPaths.map((path) => {
+					// Use hdPrivateKey for hardened paths
+					const childKey = hdPrivateKey.deriveChild(path).hdPublicKey; // Note the change here
+					const address = childKey.publicKey.toAddress().toString();
+					return { path, address };
 				});
-			};
-			const importMnemonicBtn = document.getElementById("importMnemonicBtn");
-			importMnemonicBtn.addEventListener("click", () => {
-				const mnemonicImport = document.getElementById("mnemonicImport");
-				const mnemonicImportValue = mnemonicImport.value;
-				const mnemonicImportValueTrimmed = mnemonicImportValue.trim();
-				if (mnemonicImportValueTrimmed) {
-					const mnemonicImportValueTrimmedArray =
-						mnemonicImportValueTrimmed.split(" ");
-					if (mnemonicImportValueTrimmedArray.length === 12) {
-						const mnemonicImportValueTrimmedArrayString =
-							mnemonicImportValueTrimmedArray.join(" ");
-						const mnemonicImportValueTrimmedArrayStringValid = mnemonic.isValid(
-							mnemonicImportValueTrimmedArrayString
-						);
-						if (mnemonicImportValueTrimmedArrayStringValid) {
-							const hdPrivateKeyImport = bsv.HDPrivateKey.fromSeed(
-								mnemonic.toSeed(mnemonicImportValueTrimmedArrayString)
-							);
-							const hdPublicKeyImport =
-								bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKeyImport);
-							addresses.length = 0;
-							qrcodes.length = 0;
-							for (let i = 0; i < 10; i++) {
-								const address = hdPublicKeyImport
-									.deriveChild(i)
-									.publicKey.toAddress()
-									.toString();
-								addresses.push(address);
-								const qr = new QRious({
-									element: document.getElementById(`qrcode-${i}`),
-									value: address,
-								});
-								qrcodes.push(qr);
-							}
-							renderAddresses();
-							renderQrcodes();
-						} else {
-							alert("Invalid mnemonic.");
-						}
-					} else {
-						alert("Invalid mnemonic.");
-					}
-				} else {
-					alert("Invalid mnemonic.");
-				}
-			});
-			generateAddresses();
-			renderAddresses();
-			renderQrcodes();
+
+				return addresses;
+			}
+
+			// Event listener for the "Generate Addresses" button
+			document
+				.getElementById("generateAddressesBtn")
+				.addEventListener("click", () => {
+					const selectedDerivationPathIndex =
+						document.getElementById("derivationPath").selectedIndex;
+					const selectedDerivationPaths = derivationPaths.slice(
+						0,
+						selectedDerivationPathIndex + 1
+					);
+					// Pass hdPrivateKey instead of hdPublicKey
+					const generatedAddresses = generateAddresses(
+						hdPrivateKey,
+						selectedDerivationPaths
+					);
+					renderAddressesAndQRCodes(generatedAddresses);
+				});
+
+			// Populate the derivation path select element
+			function populateDerivationPathSelect(derivationPaths) {
+				const derivationPathSelect = document.getElementById("derivationPath");
+				derivationPaths.forEach((path, index) => {
+					const option = document.createElement("option");
+					option.value = index; // Index as value to know how many to generate
+					option.textContent = path;
+					derivationPathSelect.appendChild(option);
+				});
+			}
+
+			// Initialize the select with derivation paths
+			populateDerivationPathSelect(derivationPaths);
 		</script>
 	</body>
 </html>
