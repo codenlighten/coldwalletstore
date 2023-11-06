@@ -122,8 +122,12 @@
 			const Buffer = bsv.deps.Buffer;
 			const Mnemonic = bsv.Mnemonic;
 			let mnemonic = new Mnemonic();
-			if (localStorage.mnemonic) {
-				mnemonic = Mnemonic.fromString(localStorage.mnemonic);
+			if (!localStorage.mnemonic) {
+				localStorage.mnemonic = mnemonic.toString();
+				document.getElementById("currentMnemonicList").innerHTML =
+					mnemonic.toString();
+			} else {
+				localStorage.mnemonic = mnemonic.toString();
 				document.getElementById("currentMnemonicList").innerHTML =
 					mnemonic.toString();
 			}
