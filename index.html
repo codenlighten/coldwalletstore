@@ -200,6 +200,10 @@
 			} else {
 				if (localStorage.encryptStatus || localStorage.mnemonic.includes("=")) {
 					password = prompt("Enter password to decrypt mnemonic");
+					if (!password) {
+						alert("Password is required!");
+						location.reload();
+					}
 					const decryptedMnemonic = decryptData(
 						localStorage.mnemonic,
 						password
