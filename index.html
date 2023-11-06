@@ -195,8 +195,8 @@
 				});
 				return utxos;
 			};
-			const hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
-			const hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
+			let hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
+			let hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
 			const addresses = [];
 			const qrcodes = [];
 			const derivationPaths = [
@@ -323,6 +323,12 @@
 					localStorage.mnemonic = mnemonic.toString();
 					document.getElementById("currentMnemonicList").innerHTML =
 						mnemonic.toString();
+					//update other keys
+					hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
+					hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
+					//update addresses
+					document.getElementById("currentAddressesList").innerHTML = "";
+					document.getElementById("qrcodes").innerHTML = "";
 				});
 
 			// Event listener for the "Export Mnemonic" button
