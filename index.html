@@ -176,7 +176,8 @@
 					div.innerHTML = `
                 <div class="address-info">
                     <strong>Path:</strong> ${addressObj.path}<br>
-                    <strong>Address:</strong> ${addressObj.address}
+                    <strong>Address:</strong> ${addressObj.address}<br>
+                    <strong>WIF:</strong> ${addressObj.wif}<br>
                 </div>
             `;
 
@@ -194,7 +195,8 @@
 					// Use hdPrivateKey for hardened paths
 					const childKey = hdPrivateKey.deriveChild(path).hdPublicKey; // Note the change here
 					const address = childKey.publicKey.toAddress().toString();
-					return { path, address };
+					const wif = childKey.publicKey.toAddress().toString();
+					return { path, address, wif };
 				});
 
 				return addresses;
