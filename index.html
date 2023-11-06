@@ -281,6 +281,9 @@
 
 			// Event listener for the "Reset Mnemonic" button
 			document.getElementById("resetMnemonic").addEventListener("click", () => {
+				if (!confirm("Are you sure you want to reset your mnemonic?")) {
+					return;
+				}
 				localStorage.removeItem("mnemonic");
 				location.reload();
 			});
