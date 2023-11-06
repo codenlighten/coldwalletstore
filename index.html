@@ -195,7 +195,8 @@
 					// Use hdPrivateKey for hardened paths
 					const childKey = hdPrivateKey.deriveChild(path).hdPublicKey; // Note the change here
 					const address = childKey.publicKey.toAddress().toString();
-					const wif = childKey.publicKey.toAddress().toString();
+					const privateKey = childKey.privateKey;
+					const wif = privateKey.toWIF();
 					return { path, address, wif };
 				});
 
