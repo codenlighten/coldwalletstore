@@ -198,15 +198,19 @@
 				document.getElementById("currentMnemonicList").innerHTML =
 					mnemonic.toString();
 			} else {
-				mnemonic = Mnemonic.fromString(localStorage.mnemonic);
-				document.getElementById("currentMnemonicList").innerHTML =
-					mnemonic.toString();
-				encryptStatus = localStorage.encryptStatus;
-				if (encryptStatus) {
-					password = document.getElementById("encryptMnemonic").value;
-					const decryptedMnemonic = decryptData(mnemonic.toString(), password);
+				if (localStorage.encryptStatus || localStorage.mnemonic.includes("=")) {
+					password = prompt("Enter password to decrypt mnemonic");
+					const decryptedMnemonic = decryptData(
+						localStorage.mnemonic,
+						password
+					);
+					mnemonic = Mnemonic.fromString(decryptedMnemonic);
 					document.getElementById("currentMnemonicList").innerHTML =
 						decryptedMnemonic;
+				} else {
+					mnemonic = Mnemonic.fromString(localStorage.mnemonic);
+					document.getElementById("currentMnemonicList").innerHTML =
+						localStorage.mnemonic;
 				}
 			}
 
@@ -259,18 +263,18 @@
 					const qrCodeCanvas = createQRCodeElement(addressObj.address);
 					qrCodeCanvas.className = "qrcode";
 					div.appendChild(qrCodeCanvas);
-          // add eventlistener for address balance
-          qrCodeCanvas.addEventListener("click", async () => {
-            const balance = await getBalance(addressObj.address);
-            const nonstandard = await nonstandardOutputs(addressObj.address);
-            if (balance > 0) {
-              alert(`Balance: ${balance} satoshis`);
-            } else if (nonstandard.length > 0) {
-              alert(`Nonstandard Outputs: ${nonstandard.length}`);
-            } else {
-              alert("No balance or nonstandard outputs");
-            }
-          });
+					// add eventlistener for address balance
+					qrCodeCanvas.addEventListener("click", async () => {
+						const balance = await getBalance(addressObj.address);
+						const nonstandard = await nonstandardOutputs(addressObj.address);
+						if (balance > 0) {
+							alert(`Balance: ${balance} satoshis`);
+						} else if (nonstandard.length > 0) {
+							alert(`Nonstandard Outputs: ${nonstandard.length}`);
+						} else {
+							alert("No balance or nonstandard outputs");
+						}
+					});
 					currentAddressesList.appendChild(div);
 				});
 			}
