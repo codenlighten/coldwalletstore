@@ -18,6 +18,11 @@
 			content="ColdWallet.Site is a browser based cold wallet for Bitcoin SV (BSV) that uses BIP32 HD wallets and BIP39 mnemonics."
 		/>
 
+		<meta
+			name="twitter:image"
+			content="https://plugins.whatsonchain.com/api/plugin/main/476c00258d21c947ea08379ef288946f1e6c06dba349ea3562f7c7b87a9c330e"
+		/>
+
 		<!-- bsv cdn unpkg -->
 		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv.min.js"></script>
 		<!-- mnemonic cdn bsv  -->
@@ -99,10 +104,21 @@
 				padding: 10px;
 				margin: 10px 0;
 			}
+			#logo {
+				width: 100px;
+				height: 100px;
+			}
 			@media (max-width: 600px) {
 				.container {
 					margin: 10px auto;
 					padding: 10px;
+				}
+				#header {
+					margin-bottom: 10px;
+				}
+				#logo {
+					width: 50px;
+					height: 50px;
 				}
 			}
 		</style>
@@ -110,6 +126,11 @@
 
 	<body>
 		<div class="container" id="header">
+			<img
+				src="https://plugins.whatsonchain.com/api/plugin/main/814acaa73cf1d432ddf7dcffc6eb0c5ba8735717b0197cb6e6744584faccd631"
+				alt=""
+				id="logo"
+			/>
 			<h1>ColdWallet.Site</h1>
 			<p>Browser Based Cold Wallet</p>
 		</div>
