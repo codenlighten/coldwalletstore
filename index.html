@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ColdWallet.Site - BSV Browser Based Cold Wallet</title>
+		<!-- bsv cdn unpkg -->
+		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv.min.js"></script>
+		<!-- mnemonic cdn bsv  -->
+		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-mnemonic.min.js"></script>
+		<!-- ecies -->
+		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-ecies.min.js"></script>
+		<!-- bsv message -->
+		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-message.min.js"></script>
+		<!-- qrious cdn -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+		<!-- montserrat -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			* {
+				font-family: "Montserrat", sans-serif;
+			}
+			body {
+				margin: 0;
+				padding: 0;
+			}
+			.container {
+				margin: 0 auto;
+				max-width: 600px;
+				padding: 20px;
+			}
+			#header {
+				text-align: center;
+			}
+			#importMnemonic {
+				text-align: center;
+			}
+			#currentAddresses {
+				text-align: center;
+			}
+			#currentAddressesList {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+			#currentAddressesList > div {
+				margin: 10px 0;
+			}
+			#qrcodes {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+			#qrcodes > div {
+				margin: 10px 0;
+			}
+
+			@media (max-width: 600px) {
+				#currentAddressesList {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+				}
+				#currentAddressesList > div {
+					margin: 10px 0;
+				}
+				#qrcodes {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+				}
+				#qrcodes > div {
+					margin: 10px 0;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container" id="header">
+			<h1>ColdWallet.Site</h1>
+			<p>Browser Based Cold Wallet</p>
+		</div>
+		<div class="container" id="importMnemonic">
+			<h2>Import Mnemonic</h2>
+			<p>Enter your mnemonic to import your wallet.</p>
+			<textarea name="" id="mnemonicImport" cols="30" rows="10"></textarea>
+			<button id="importMnemonicBtn">Import</button>
+		</div>
+		<div class="container" id="currentAddresses">
+			<h2>Current Addresses</h2>
+			<p>These are your current addresses.</p>
+			<div id="currentAddressesList"></div>
+		</div>
+		<div class="container" id="qrcodes"></div>
+		<script>
+			const Buffer = bsv.deps.Buffer;
+			const Mnemonic = bsv.Mnemonic;
+			const mnemonic = new Mnemonic(Mnemonic.Words.ENGLISH);
+			const hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
+			const hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
+			const addresses = [];
+			const qrcodes = [];
+			const generateAddress = (index) => {
+				const address = hdPublicKey
+					.deriveChild(index)
+					.publicKey.toAddress()
+					.toString();
+				addresses.push(address);
+				const qr = new QRious({
+					element: document.getElementById(`qrcode-${index}`),
+					value: address,
+				});
+				qrcodes.push(qr);
+			};
+			const generateAddresses = () => {
+				for (let i = 0; i < 10; i++) {
+					generateAddress(i);
+				}
+			};
+			const renderAddresses = () => {
+				const currentAddressesList = document.getElementById(
+					"currentAddressesList"
+				);
+				currentAddressesList.innerHTML = "";
+				addresses.forEach((address, index) => {
+					const div = document.createElement("div");
+					div.innerHTML = `
+        <p>${index}: ${address}</p>
+        <canvas id="qrcode-${index}"></canvas>
+      `;
+					currentAddressesList.appendChild(div);
+				});
+			};
+			const renderQrcodes = () => {
+				qrcodes.forEach((qr, index) => {
+					qr.set({
+						value: addresses[index],
+					});
+				});
+			};
+			const importMnemonicBtn = document.getElementById("importMnemonicBtn");
+			importMnemonicBtn.addEventListener("click", () => {
+				const mnemonicImport = document.getElementById("mnemonicImport");
+				const mnemonicImportValue = mnemonicImport.value;
+				const mnemonicImportValueTrimmed = mnemonicImportValue.trim();
+				if (mnemonicImportValueTrimmed) {
+					const mnemonicImportValueTrimmedArray =
+						mnemonicImportValueTrimmed.split(" ");
+					if (mnemonicImportValueTrimmedArray.length === 12) {
+						const mnemonicImportValueTrimmedArrayString =
+							mnemonicImportValueTrimmedArray.join(" ");
+						const mnemonicImportValueTrimmedArrayStringValid = mnemonic.isValid(
+							mnemonicImportValueTrimmedArrayString
+						);
+						if (mnemonicImportValueTrimmedArrayStringValid) {
+							const hdPrivateKeyImport = bsv.HDPrivateKey.fromSeed(
+								mnemonic.toSeed(mnemonicImportValueTrimmedArrayString)
+							);
+							const hdPublicKeyImport =
+								bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKeyImport);
+							addresses.length = 0;
+							qrcodes.length = 0;
+							for (let i = 0; i < 10; i++) {
+								const address = hdPublicKeyImport
+									.deriveChild(i)
+									.publicKey.toAddress()
+									.toString();
+								addresses.push(address);
+								const qr = new QRious({
+									element: document.getElementById(`qrcode-${i}`),
+									value: address,
+								});
+								qrcodes.push(qr);
+							}
+							renderAddresses();
+							renderQrcodes();
+						} else {
+							alert("Invalid mnemonic.");
+						}
+					} else {
+						alert("Invalid mnemonic.");
+					}
+				} else {
+					alert("Invalid mnemonic.");
+				}
+			});
+			generateAddresses();
+			renderAddresses();
+			renderQrcodes();
+		</script>
+	</body>
+</html>
