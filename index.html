@@ -193,10 +193,11 @@
 			function generateAddresses(hdPrivateKey, derivationPaths) {
 				const addresses = derivationPaths.map((path) => {
 					// Use hdPrivateKey for hardened paths
+					const childPrivateKey = hdPrivateKey.deriveChild(path);
 					const childKey = hdPrivateKey.deriveChild(path).hdPublicKey; // Note the change here
 					const address = childKey.publicKey.toAddress().toString();
-					const privateKey = childKey.privateKey;
-					const wif = privateKey.toWIF();
+					//private key
+					const wif = childPrivateKey.privateKey.toWIF();
 					return { path, address, wif };
 				});
 
