@@ -1,291 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>ColdWallet.Site - BSV Browser Based Cold Wallet</title>
-		<!-- favicon -->
-		<link
-			rel="icon"
-			href="https://plugins.whatsonchain.com/api/plugin/main/814acaa73cf1d432ddf7dcffc6eb0c5ba8735717b0197cb6e6744584faccd631"
-		/>
-		<!-- twitter -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:site" content="@coldwalletsite" />
-		<meta name="twitter:creator" content="@coldwalletsite" />
-		<meta
-			name="twitter:title"
-			content="ColdWallet.Site - BSV Browser Based Cold Wallet"
-		/>
-		<meta
-			name="twitter:description"
-			content="ColdWallet.Site is a browser based cold wallet for Bitcoin SV (BSV) that uses BIP32 HD wallets and BIP39 mnemonics."
-		/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ColdWallet.Site - BSV Browser Based Cold Wallet</title>
+    <!-- favicon -->
+    <link
+      rel="icon"
+      href="https://plugins.whatsonchain.com/api/plugin/main/814acaa73cf1d432ddf7dcffc6eb0c5ba8735717b0197cb6e6744584faccd631"
+    />
+    <!-- twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@coldwalletsite" />
+    <meta name="twitter:creator" content="@coldwalletsite" />
+    <meta
+      name="twitter:title"
+      content="ColdWallet.Site - BSV Browser Based Cold Wallet"
+    />
+    <meta
+      name="twitter:description"
+      content="ColdWallet.Site is a browser based cold wallet for Bitcoin SV (BSV) that uses BIP32 HD wallets and BIP39 mnemonics."
+    />
 
-		<meta
-			name="twitter:image"
-			content="https://plugins.whatsonchain.com/api/plugin/main/476c00258d21c947ea08379ef288946f1e6c06dba349ea3562f7c7b87a9c330e"
-		/>
+    <meta
+      name="twitter:image"
+      content="https://plugins.whatsonchain.com/api/plugin/main/476c00258d21c947ea08379ef288946f1e6c06dba349ea3562f7c7b87a9c330e"
+    />
 
-		<!-- bsv cdn unpkg -->
-		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv.min.js"></script>
-		<!-- mnemonic cdn bsv  -->
-		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-mnemonic.min.js"></script>
-		<!-- ecies -->
-		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-ecies.min.js"></script>
-		<!-- bsv message -->
-		<script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-message.min.js"></script>
-		<!-- qrious cdn -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-		<style>
-			* {
-				box-sizing: border-box;
-				margin: 0;
-				padding: 0;
-			}
-			body {
-				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-				background-color: #f4f7f6;
-				color: #333;
-				line-height: 1.6;
-				padding: 20px;
-				word-wrap: break-word;
-			}
-			.container {
-				background-color: #fff;
-				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-				border-radius: 8px;
-				padding: 20px;
-				margin: 20px auto;
-				max-width: 800px;
-				word-wrap: break-word;
-			}
-			h1,
-			h2 {
-				color: #333;
-			}
-			button {
-				background-color: #008cba;
-				border: none;
-				border-radius: 5px;
-				color: white;
-				padding: 10px 20px;
-				text-decoration: none;
-				margin: 4px 2px;
-				cursor: pointer;
-				font-size: 16px;
-				transition: background-color 0.3s ease;
-			}
-			button:hover {
-				background-color: #005f73;
-			}
-			input[type="text"],
-			input[type="password"] {
-				border: 1px solid #ddd;
-				border-radius: 5px;
-				padding: 10px;
-				margin: 10px 0;
-				width: 95%;
-			}
-			label {
-				display: block;
-				margin: 20px 0 5px;
-			}
-			#header {
-				text-align: center;
-				border-bottom: 5px solid #008cba;
-				padding-bottom: 20px;
-				margin-bottom: 20px;
-			}
-			#header h1 {
-				margin-bottom: 10px;
-			}
-			textarea {
-				width: 100%;
-				height: 100px;
-				border: 1px solid #ddd;
-				border-radius: 5px;
-				padding: 10px;
-				margin: 10px 0;
-			}
-			#logo {
-				width: 100px;
-				height: 100px;
-			}
-			.key {
-				font-family: monospace;
-				border: #005f73 1px solid;
-				padding: 10px;
-			}
-			@media (max-width: 600px) {
-				.container {
-					margin: 10px auto;
-					padding: 10px;
-				}
-				#header {
-					margin-bottom: 10px;
-				}
-				#logo {
-					width: 50px;
-					height: 50px;
-				}
-			}
-		</style>
-	</head>
+    <!-- bsv cdn unpkg -->
+    <script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv.min.js"></script>
+    <!-- mnemonic cdn bsv  -->
+    <script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-mnemonic.min.js"></script>
+    <!-- ecies -->
+    <script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-ecies.min.js"></script>
+    <!-- bsv message -->
+    <script src="https://cdn.jsdelivr.net/npm/bsv@1.5.0/bsv-message.min.js"></script>
+    <!-- qrious cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7f6;
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+        word-wrap: break-word;
+      }
+      .container {
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 800px;
+        word-wrap: break-word;
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      button {
+        background-color: #008cba;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #005f73;
+      }
+      input[type="text"],
+      input[type="password"] {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+        width: 95%;
+      }
+      label {
+        display: block;
+        margin: 20px 0 5px;
+      }
+      #header {
+        text-align: center;
+        border-bottom: 5px solid #008cba;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+      }
+      #header h1 {
+        margin-bottom: 10px;
+      }
+      textarea {
+        width: 100%;
+        height: 100px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+      }
+      #logo {
+        width: 100px;
+        height: 100px;
+      }
+      .key {
+        font-family: monospace;
+        border: #005f73 1px solid;
+        padding: 10px;
+      }
+      @media (max-width: 600px) {
+        .container {
+          margin: 10px auto;
+          padding: 10px;
+        }
+        #header {
+          margin-bottom: 10px;
+        }
+        #logo {
+          width: 50px;
+          height: 50px;
+        }
+      }
+    </style>
+  </head>
 
-	<body>
-		<div class="container" id="header">
-			<img
-				src="https://plugins.whatsonchain.com/api/plugin/main/814acaa73cf1d432ddf7dcffc6eb0c5ba8735717b0197cb6e6744584faccd631"
-				alt=""
-				id="logo"
-			/>
-			<h1>ColdWallet.Site</h1>
-			<p>Browser Based Cold Wallet</p>
-		</div>
-		<div class="container" id="importMnemonic">
-			<h2>Import Mnemonic</h2>
-			<p>Enter your mnemonic to import your wallet.</p>
-			<textarea name="" id="mnemonicImport" cols="30" rows="10"></textarea>
-			<div class="buttons">
-				<button id="importMnemonicBtn">Import</button>
-				<button id="resetMnemonic">Reset Mnemonic</button>
-			</div>
-		</div>
-		<div class="container" id="currentMnemonic">
-			<h3>Current Mnemonic - Write it down</h3>
-			<p class="key" id="currentMnemonicList"></p>
-			<p class="key" id="currentAddress"></p>
-			<p class="key" id="currentPath"></p>
-		</div>
-		<div class="container" id="derivationPathSelection">
-			<h2>Derivation Path</h2>
-			<p>Select the derivation path for your addresses:</p>
-			<select id="derivationPath"></select>
-			<button id="generateAddressesBtn">Generate Addresses</button>
-		</div>
-		<div class="container" id="currentAddresses">
-			<h2>Current Paths & Addresses</h2>
-			<p>These are your current addresses.</p>
-			<div id="currentAddressesList"></div>
-		</div>
-		<div class="container" id="qrcodes"></div>
-		<div class="container" id="sendBsv">
-			<h2>Send BSV</h2>
-			<p>Send BSV to an address.</p>
-			<label for="address">Address</label>
-			<input type="text" id="address" name="address" placeholder="Address" />
-			<label for="amount">Amount</label>
-			<input type="text" id="amount" name="amount" placeholder="Amount" />
-			<button id="sendSatoshis">Send</button>
-		</div>
-		<div class="container" id="resultTxid"></div>
-		<div class="container" id="exportMnemonic">
-			<h2>Export Mnemonic</h2>
-			<p>Export your mnemonic.</p>
-			<button id="exportMnemonicBtn">Export</button>
-		</div>
-		<div class="container" id="copyright2023">
-			<a
-				href="https://plugins.whatsonchain.com/api/plugin/main/bf56d81106b7cbc3af693360d35cffc0e1067c3d05301108ea08cfd5a3ba805d"
-				>Latest Fully Onchain Version</a
-			>
-			<p id="hash"></p>
-			<p>&copy; 2023 ColdWallet.Site</p>
-		</div>
-		<script>
-			const Buffer = bsv.deps.Buffer;
-			const Mnemonic = bsv.Mnemonic;
-			const hash = bsv.crypto.Hash;
-			const hashdata = (data) => {
-				return hash.sha256(Buffer.from(data)).toString("hex");
-			};
-			//english
+  <body>
+    <div class="container" id="header">
+      <img
+        src="https://plugins.whatsonchain.com/api/plugin/main/814acaa73cf1d432ddf7dcffc6eb0c5ba8735717b0197cb6e6744584faccd631"
+        alt=""
+        id="logo"
+      />
+      <h1>ColdWallet.Site</h1>
+      <p>Browser Based Cold Wallet</p>
+    </div>
+    <div class="container" id="importMnemonic">
+      <h2>Import Mnemonic</h2>
+      <p>Enter your mnemonic to import your wallet.</p>
+      <textarea name="" id="mnemonicImport" cols="30" rows="10"></textarea>
+      <div class="buttons">
+        <button id="importMnemonicBtn">Import</button>
+        <button id="resetMnemonic">Reset Mnemonic</button>
+      </div>
+    </div>
+    <div class="container" id="currentMnemonic">
+      <h3>Current Mnemonic - Write it down</h3>
+      <p class="key" id="currentMnemonicList"></p>
+      <p class="key" id="currentAddress"></p>
+      <p class="key" id="currentPath"></p>
+    </div>
+    <div class="container" id="derivationPathSelection">
+      <h2>Derivation Path</h2>
+      <p>Select the derivation path for your addresses:</p>
+      <select id="derivationPath"></select>
+      <button id="generateAddressesBtn">Generate Addresses</button>
+    </div>
+    <div class="container" id="currentAddresses">
+      <h2>Current Paths & Addresses</h2>
+      <p>These are your current addresses.</p>
+      <div id="currentAddressesList"></div>
+    </div>
+    <div class="container" id="qrcodes"></div>
+    <div class="container" id="sendBsv">
+      <h2>Send BSV</h2>
+      <p>Send BSV to an address.</p>
+      <label for="address">Address</label>
+      <input type="text" id="address" name="address" placeholder="Address" />
+      <label for="amount">Amount</label>
+      <input type="text" id="amount" name="amount" placeholder="Amount" />
+      <button id="sendSatoshis">Send</button>
+    </div>
+    <div class="container" id="resultTxid"></div>
+    <div class="container" id="exportMnemonic">
+      <h2>Export Mnemonic</h2>
+      <p>Export your mnemonic.</p>
+      <button id="exportMnemonicBtn">Export</button>
+    </div>
+    <div class="container" id="copyright2023">
+      <a
+        href="https://plugins.whatsonchain.com/api/plugin/main/bf56d81106b7cbc3af693360d35cffc0e1067c3d05301108ea08cfd5a3ba805d"
+        >Latest Fully Onchain Version</a
+      >
+      <p id="hash"></p>
+      <p>&copy; 2023 ColdWallet.Site</p>
+    </div>
+    <script>
+      const Buffer = bsv.deps.Buffer;
+      const Mnemonic = bsv.Mnemonic;
+      const hash = bsv.crypto.Hash;
+      const hashdata = (data) => {
+        return hash.sha256(Buffer.from(data)).toString("hex");
+      };
+      //english
 
-			let mnemonic = new Mnemonic(Mnemonic.Words.ENGLISH);
-			let hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
-			let hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
-			let addresses = [];
-			let qrcodes = [];
-			const derivationPaths = [
-				"m/44'/0'/0'/0/0",
-				"m/44'/0'/0'/0/1",
-				"m/44'/0'/0'/0/2",
-				"m/44'/0'/0'/0/3",
-				"m/44'/0'/0'/0/4",
-				"m/44'/0'/0'/0/5",
-				"m/44'/0'/0'/0/6",
-				"m/44'/0'/0'/0/7",
-				"m/44'/0'/0'/0/8",
-				"m/44'/0'/0'/0/9",
-			];
-			let currentSelectedAddress;
-			if (!localStorage.mnemonic) {
-				mnemonic = new Mnemonic(Mnemonic.Words.ENGLISH);
-				localStorage.mnemonic = mnemonic.toString();
-			} else {
-				mnemonic = Mnemonic.fromString(localStorage.mnemonic);
-			}
-			document.getElementById("currentMnemonicList").innerHTML =
-				mnemonic.toString();
-			hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
-			hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
-			addresses = generateAddresses(hdPrivateKey, derivationPaths);
-			document.getElementById(
-				"currentAddress"
-			).innerHTML = `Root Address: ${addresses[0].address}`;
-			document.getElementById(
-				"currentPath"
-			).innerHTML = `Root Path: ${addresses[0].path}`;
+      let mnemonic = new Mnemonic(Mnemonic.Words.ENGLISH);
+      let hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
+      let hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
+      let addresses = [];
+      let qrcodes = [];
+      const derivationPaths = [
+        "m/44'/0'/0'/0/0",
+        "m/44'/0'/0'/0/1",
+        "m/44'/0'/0'/0/2",
+        "m/44'/0'/0'/0/3",
+        "m/44'/0'/0'/0/4",
+        "m/44'/0'/0'/0/5",
+        "m/44'/0'/0'/0/6",
+        "m/44'/0'/0'/0/7",
+        "m/44'/0'/0'/0/8",
+        "m/44'/0'/0'/0/9",
+      ];
+      let currentSelectedAddress;
+      if (!localStorage.mnemonic) {
+        mnemonic = new Mnemonic(Mnemonic.Words.ENGLISH);
+        localStorage.mnemonic = mnemonic.toString();
+      } else {
+        mnemonic = Mnemonic.fromString(localStorage.mnemonic);
+      }
+      document.getElementById("currentMnemonicList").innerHTML =
+        mnemonic.toString();
+      hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
+      hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
+      addresses = generateAddresses(hdPrivateKey, derivationPaths);
+      document.getElementById(
+        "currentAddress"
+      ).innerHTML = `Root Address: ${addresses[0].address}`;
+      document.getElementById(
+        "currentPath"
+      ).innerHTML = `Root Path: ${addresses[0].path}`;
 
-			const getBalance = async (address) => {
-				const response = await fetch(
-					`https://api.whatsonchain.com/v1/bsv/main/address/${address}/balance`
-				);
-				const data = await response.json();
-				const balance = data.confirmed + data.unconfirmed;
-				return balance;
-			};
+      const getBalance = async (address) => {
+        const response = await fetch(
+          `https://api.whatsonchain.com/v1/bsv/main/address/${address}/balance`
+        );
+        const data = await response.json();
+        const balance = data.confirmed + data.unconfirmed;
+        return balance;
+      };
 
-			const utxos = async (address) => {
-				//get utxos for address with  non standard utxos
-				const response = await fetch(
-					`https://api.whatsonchain.com/v1/bsv/main/address/${address}/unspent`
-				);
-				const data = await response.json();
-				const utxos = data.map((utxo) => {
-					return {
-						txid: utxo.tx_hash,
-						vout: utxo.tx_pos,
-						satoshis: utxo.value,
-						script: bsv.Script.buildPublicKeyHashOut(address).toString(),
-					};
-				});
-				return utxos;
-			};
+      const utxos = async (address) => {
+        //get utxos for address with  non standard utxos
+        const response = await fetch(
+          `https://api.whatsonchain.com/v1/bsv/main/address/${address}/unspent`
+        );
+        const data = await response.json();
+        const utxos = data.map((utxo) => {
+          return {
+            txid: utxo.tx_hash,
+            vout: utxo.tx_pos,
+            satoshis: utxo.value,
+            script: bsv.Script.buildPublicKeyHashOut(address).toString(),
+          };
+        });
+        return utxos;
+      };
 
-			// Utility function to create a QR Code element
-			function createQRCodeElement(address) {
-				const qr = new QRious({
-					value: address,
-					size: 150,
-				});
-				const canvas = document.createElement("canvas");
-				canvas.getContext("2d").drawImage(qr.canvas, 0, 0);
-				return canvas;
-			}
+      // Utility function to create a QR Code element
+      function createQRCodeElement(address) {
+        const qr = new QRious({
+          value: address,
+          size: 150,
+        });
+        const canvas = document.createElement("canvas");
+        canvas.getContext("2d").drawImage(qr.canvas, 0, 0);
+        return canvas;
+      }
 
-			// Render the QR codes and addresses to the UI
-			function renderAddressesAndQRCodes(addresses) {
-				const currentAddressesList = document.getElementById(
-					"currentAddressesList"
-				);
-				currentAddressesList.innerHTML = ""; // Clear the list
+      // Render the QR codes and addresses to the UI
+      function renderAddressesAndQRCodes(addresses) {
+        const currentAddressesList = document.getElementById(
+          "currentAddressesList"
+        );
+        currentAddressesList.innerHTML = ""; // Clear the list
 
-				addresses.forEach((addressObj) => {
-					const div = document.createElement("div");
-					div.className = "address-item";
-					div.innerHTML = `
+        addresses.forEach((addressObj) => {
+          const div = document.createElement("div");
+          div.className = "address-item";
+          div.innerHTML = `
 						             <div class="address-info">
 						                 <strong>Path:</strong> ${addressObj.path}<br>
 						                 <strong>Address:</strong> ${addressObj.address}<br>
@@ -293,167 +293,167 @@
 						             </div>
 						         `;
 
-					const qrCodeCanvas = createQRCodeElement(addressObj.address);
-					qrCodeCanvas.className = "qrcode";
-					const p = document.createElement("p");
-					const directions = document.createElement("p");
-					directions.innerHTML = `Click QR Code to get balance`;
-					div.appendChild(qrCodeCanvas);
-					div.appendChild(directions);
-					//add event listener to qr code for balance
-					qrCodeCanvas.addEventListener("click", async () => {
-						const balance = await getBalance(addressObj.address);
-						p.innerHTML = `Balance: ${balance}`;
-						//set current selected address
-						currentSelectedAddress = {
-							address: addressObj.address,
-							balance: balance,
-							privateKey: addressObj.wif,
-						};
+          const qrCodeCanvas = createQRCodeElement(addressObj.address);
+          qrCodeCanvas.className = "qrcode";
+          const p = document.createElement("p");
+          const directions = document.createElement("p");
+          directions.innerHTML = `Click QR Code to get balance`;
+          div.appendChild(qrCodeCanvas);
+          div.appendChild(directions);
+          //add event listener to qr code for balance
+          qrCodeCanvas.addEventListener("click", async () => {
+            const balance = await getBalance(addressObj.address);
+            p.innerHTML = `Balance: ${balance}`;
+            //set current selected address
+            currentSelectedAddress = {
+              address: addressObj.address,
+              balance: balance,
+              privateKey: addressObj.wif,
+            };
 
-						div.appendChild(p);
-					});
-					currentAddressesList.appendChild(div);
-				});
-			}
+            div.appendChild(p);
+          });
+          currentAddressesList.appendChild(div);
+        });
+      }
 
-			// Generate addresses for the selected derivation paths
-			function generateAddresses(hdPrivateKey, derivationPaths) {
-				const addresses = derivationPaths.map((path) => {
-					// Use hdPrivateKey for hardened paths
-					const childPrivateKey = hdPrivateKey.deriveChild(path);
-					const childKey = hdPrivateKey.deriveChild(path).hdPublicKey; // Note the change here
-					const address = childKey.publicKey.toAddress().toString();
-					//private key
-					const wif = childPrivateKey.privateKey.toWIF();
+      // Generate addresses for the selected derivation paths
+      function generateAddresses(hdPrivateKey, derivationPaths) {
+        const addresses = derivationPaths.map((path) => {
+          // Use hdPrivateKey for hardened paths
+          const childPrivateKey = hdPrivateKey.deriveChild(path);
+          const childKey = hdPrivateKey.deriveChild(path).hdPublicKey; // Note the change here
+          const address = childKey.publicKey.toAddress().toString();
+          //private key
+          const wif = childPrivateKey.privateKey.toWIF();
 
-					return { path, address, wif };
-				});
+          return { path, address, wif };
+        });
 
-				return addresses;
-			}
+        return addresses;
+      }
 
-			// Event listener for the "Generate Addresses" button
-			document
-				.getElementById("generateAddressesBtn")
-				.addEventListener("click", () => {
-					const selectedDerivationPathIndex =
-						document.getElementById("derivationPath").selectedIndex;
-					const selectedDerivationPaths = derivationPaths.slice(
-						0,
-						selectedDerivationPathIndex + 1
-					);
-					// Pass hdPrivateKey instead of hdPublicKey
-					const generatedAddresses = generateAddresses(
-						hdPrivateKey,
-						selectedDerivationPaths
-					);
-					renderAddressesAndQRCodes(generatedAddresses);
-				});
+      // Event listener for the "Generate Addresses" button
+      document
+        .getElementById("generateAddressesBtn")
+        .addEventListener("click", () => {
+          const selectedDerivationPathIndex =
+            document.getElementById("derivationPath").selectedIndex;
+          const selectedDerivationPaths = derivationPaths.slice(
+            0,
+            selectedDerivationPathIndex + 1
+          );
+          // Pass hdPrivateKey instead of hdPublicKey
+          const generatedAddresses = generateAddresses(
+            hdPrivateKey,
+            selectedDerivationPaths
+          );
+          renderAddressesAndQRCodes(generatedAddresses);
+        });
 
-			// Populate the derivation path select element
-			function populateDerivationPathSelect(derivationPaths) {
-				const derivationPathSelect = document.getElementById("derivationPath");
-				derivationPaths.forEach((path, index) => {
-					const option = document.createElement("option");
-					option.value = index; // Index as value to know how many to generate
-					option.textContent = path;
-					derivationPathSelect.appendChild(option);
-				});
-			}
+      // Populate the derivation path select element
+      function populateDerivationPathSelect(derivationPaths) {
+        const derivationPathSelect = document.getElementById("derivationPath");
+        derivationPaths.forEach((path, index) => {
+          const option = document.createElement("option");
+          option.value = index; // Index as value to know how many to generate
+          option.textContent = path;
+          derivationPathSelect.appendChild(option);
+        });
+      }
 
-			// Initialize the select with derivation paths
-			populateDerivationPathSelect(derivationPaths);
+      // Initialize the select with derivation paths
+      populateDerivationPathSelect(derivationPaths);
 
-			// Event listener for the "Import Mnemonic" button
-			document
-				.getElementById("importMnemonicBtn")
-				.addEventListener("click", () => {
-					let mnemonicImport = document.getElementById("mnemonicImport").value;
-					//trim whitespace
-					mnemonicImport = mnemonicImport.trim();
-					mnemonic = Mnemonic.fromString(mnemonicImport);
-					localStorage.mnemonic = mnemonic.toString();
-					document.getElementById("currentMnemonicList").innerHTML =
-						mnemonic.toString();
-					//update other keys
-					hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
-					hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
-					//update addresses
-					document.getElementById("currentAddressesList").innerHTML = "";
-					document.getElementById("qrcodes").innerHTML = "";
-				});
+      // Event listener for the "Import Mnemonic" button
+      document
+        .getElementById("importMnemonicBtn")
+        .addEventListener("click", () => {
+          let mnemonicImport = document.getElementById("mnemonicImport").value;
+          //trim whitespace
+          mnemonicImport = mnemonicImport.trim();
+          mnemonic = Mnemonic.fromString(mnemonicImport);
+          localStorage.mnemonic = mnemonic.toString();
+          document.getElementById("currentMnemonicList").innerHTML =
+            mnemonic.toString();
+          //update other keys
+          hdPrivateKey = bsv.HDPrivateKey.fromSeed(mnemonic.toSeed());
+          hdPublicKey = bsv.HDPublicKey.fromHDPrivateKey(hdPrivateKey);
+          //update addresses
+          document.getElementById("currentAddressesList").innerHTML = "";
+          document.getElementById("qrcodes").innerHTML = "";
+        });
 
-			// Event listener for the "Export Mnemonic" button
-			document
-				.getElementById("exportMnemonicBtn")
-				.addEventListener("click", () => {
-					const mnemonicExport = document.getElementById(
-						"currentMnemonicList"
-					).innerHTML;
-					navigator.clipboard.writeText(mnemonicExport);
-					alert("Mnemonic copied to clipboard!");
-				});
+      // Event listener for the "Export Mnemonic" button
+      document
+        .getElementById("exportMnemonicBtn")
+        .addEventListener("click", () => {
+          const mnemonicExport = document.getElementById(
+            "currentMnemonicList"
+          ).innerHTML;
+          navigator.clipboard.writeText(mnemonicExport);
+          alert("Mnemonic copied to clipboard!");
+        });
 
-			// Event listener for the "Reset Mnemonic" button
-			document.getElementById("resetMnemonic").addEventListener("click", () => {
-				if (!confirm("Are you sure you want to reset your mnemonic?")) {
-					return;
-				}
-				localStorage.removeItem("mnemonic");
-				location.reload();
-			});
-			const broadcast = async (tx) => {
-				const response = await fetch(
-					`https://api.whatsonchain.com/v1/bsv/main/tx/raw`,
-					{
-						method: "POST",
-						body: JSON.stringify({ txhex: tx }),
-					}
-				);
-				const data = await response.json();
-				return data;
-			};
-			// Event listener for the "Send" button
-			document
-				.getElementById("sendSatoshis")
-				.addEventListener("click", async () => {
-					// confirm current selected address
-					if (!currentSelectedAddress) {
-						alert("Please select an address to send from.");
-						return;
-					}
-					const address = document.getElementById("address").value;
-					const amount = document.getElementById("amount").value;
-					const privateKey = currentSelectedAddress.privateKey;
-					const uts = await utxos(currentSelectedAddress.address);
-					console.log(uts);
-					const tx = new bsv.Transaction()
-						.from(uts)
-						.feePerKb(10)
-						.to(address, parseInt(amount))
-						.change(currentSelectedAddress.address)
-						.sign(privateKey);
-					if (
-						!confirm(
-							`Are you sure you want to send ${amount} Satoshis to ${address}?`
-						)
-					) {
-						return;
-					}
-					const txid = await broadcast(tx.toString());
-					console.log(txid);
-					document.getElementById(
-						"resultTxid"
-					).innerHTML = `<a href="https://whatsonchain.com/tx/${txid}" target="_blank">Transaction ID: ${txid}</a>`;
-				});
-			//ondocumentload
-			document.addEventListener("DOMContentLoaded", async () => {
-				//hash of html for security
-				document.getElementById("hash").innerHTML = `Hash: ${hashdata(
-					document.documentElement.innerHTML
-				)}`;
-			});
-		</script>
-	</body>
+      // Event listener for the "Reset Mnemonic" button
+      document.getElementById("resetMnemonic").addEventListener("click", () => {
+        if (!confirm("Are you sure you want to reset your mnemonic?")) {
+          return;
+        }
+        localStorage.removeItem("mnemonic");
+        location.reload();
+      });
+      const broadcast = async (tx) => {
+        const response = await fetch(
+          `https://api.whatsonchain.com/v1/bsv/main/tx/raw`,
+          {
+            method: "POST",
+            body: JSON.stringify({ txhex: tx }),
+          }
+        );
+        const data = await response.json();
+        return data;
+      };
+      // Event listener for the "Send" button
+      document
+        .getElementById("sendSatoshis")
+        .addEventListener("click", async () => {
+          // confirm current selected address
+          if (!currentSelectedAddress) {
+            alert("Please select an address to send from.");
+            return;
+          }
+          const address = document.getElementById("address").value;
+          const amount = document.getElementById("amount").value;
+          const privateKey = currentSelectedAddress.privateKey;
+          const uts = await utxos(currentSelectedAddress.address);
+          console.log(uts);
+          const tx = new bsv.Transaction();
+          tx.from(uts);
+          tx.feePerKb(10);
+          tx.to(address, parseInt(amount));
+          tx.change(currentSelectedAddress.address);
+          tx.sign(privateKey);
+          if (
+            !confirm(
+              `Are you sure you want to send ${amount} Satoshis to ${address}?`
+            )
+          ) {
+            return;
+          }
+          const txid = await broadcast(tx.toString());
+          console.log(txid);
+          document.getElementById(
+            "resultTxid"
+          ).innerHTML = `<a href="https://whatsonchain.com/tx/${txid}" target="_blank">Transaction ID: ${txid}</a>`;
+        });
+      //ondocumentload
+      document.addEventListener("DOMContentLoaded", async () => {
+        //hash of html for security
+        document.getElementById("hash").innerHTML = `Hash: ${hashdata(
+          document.documentElement.innerHTML
+        )}`;
+      });
+    </script>
+  </body>
 </html>
