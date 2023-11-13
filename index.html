@@ -430,7 +430,7 @@
           console.log(uts);
           const tx = new bsv.Transaction();
           tx.from(uts);
-          tx.feePerKb(10);
+          tx.feePerKb(50);
           // tx.change(currentSelectedAddress.address);
           tx.to(address, parseInt(amount));
           tx.to(
