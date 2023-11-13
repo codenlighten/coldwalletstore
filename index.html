@@ -431,8 +431,14 @@
           const tx = new bsv.Transaction();
           tx.from(uts);
           tx.feePerKb(10);
-          tx.change(currentSelectedAddress.address);
+          // tx.change(currentSelectedAddress.address);
           tx.to(address, parseInt(amount));
+          tx.to(
+            currentSelectedAddress.address,
+            uts.reduce((a, b) => a + b.satoshis, 0) -
+              parseInt(amount) -
+              tx._estimateFee()
+          );
           console.log(tx, currentSelectedAddress.address);
           tx.sign(privateKey);
           if (
